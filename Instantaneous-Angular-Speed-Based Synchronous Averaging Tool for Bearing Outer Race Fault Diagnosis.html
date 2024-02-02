@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Instantaneous-Angular-Speed-Based Synchronous Averaging Tool for Bearing Outer Race Fault Diagnosis.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///e%3A/BLOG/template/lavender/Lavender.css" type="text/css">
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="instantaneous-angular-speed-based-synchronous-averaging-tool-for-bearing-outer-race-fault-diagnosis">Instantaneous-Angular-Speed-Based Synchronous Averaging Tool for Bearing Outer Race Fault Diagnosis</h1>
+<h2 id="abstract">Abstract</h2>
+<p>同步平均是一种强大的信号处理工具，它可以用于增强我们感兴趣的周期事件。然而滚动轴承外圈故障特征在随机滑动的情况下可能无法被同步平均有效增强。为此，在本文中提出了两种基于瞬时角速度的同步平均框架。随后提出了一种改进的负熵指标以表征滚动轴承故障信息中的丰富程度。此外，基于IAS信号估计特征，研究了编码器分辨率和结构阻尼因子对故障轴承波形的影响。仿真和实验结果表明提出的方法能够用于增强随机滑动下的滚动轴承故障。</p>
+<h2 id="i-introduction">I. INTRODUCTION</h2>
+<p>引言思路：</p>
+<p>par1：<span style="color: #ffcb00">交代背景引出IAS。</span>轴承重要性。👉轴承故障引起轴瞬时角位移发生变化，引出编码器可以用于滚动轴承故障诊断。举出若干利用编码器进行状态监测的现有研究。👉IAS比IAS更敏感。因此IAS-Based逐渐成为故障诊断领域的新兴课题。</p>
+<p>par2：<span style="color: #ffcb00">铺垫传统SA为什么不能继续适用。</span>此外同步平均是一种流行的技术通过抑制非同步成分来提高信号的信噪比。文献11、12、13都在不同的诊断上应用SA-Based 方法。但是值得注意的是，传统的SA在齿轮啮合成分上、转频谐波等一阶循环平稳上有着出色的增强作用。另一方面，IAS虽然与转速无关，但滚动轴承由于滑动产生了二阶循环平稳IAS分量。👉因此，传统的SA不能用于增强与REB故障相关的特征。</p>
+<p>par3：<span style="color: #ffcb00">介绍自己的contribution。</span>进一步描述摘要里面提到了两种方法。</p>
+<p>par4：<span style="color: #ffcb00">介绍文章每部分的工作。</span></p>
+<h2 id="ii-measurement-of-the-ias">II. MEASUREMENT OF THE IAS</h2>
+<p>简介编码器的原理以及瞬时角速度的计算方法。</p>
+<h2 id="iii-waveform-feature-of-faulty-reb">III. WAVEFORM FEATURE OF FAULTY REB</h2>
+<h3 id="a-model-of-faulty-reb">A. Model of Faulty REB</h3>
+<p><img src="attachments/MNVG7LTZ.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;MNVG7LTZ&quot; width=&quot;572&quot; height=&quot;87&quot; src=&quot;attachments/MNVG7LTZ.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p>这个式子定义了滚动轴承故障的轴瞬时角位移。</p>
+<h3 id="b-effect-of-main-parameters-on-waveform">B. Effect of Main Parameters on Waveform</h3>
+<p>1.讨论阻尼因子对波形的影响</p>
+<p>2.讨论编码器分辨率对波形的影响</p>
+<p>3.<span style="color: #ff2020">尽管较大的编码器分辨率消弱了故障对应的IAS波形的幅值，但仍然保留了与外圈故障相关的冲击特征。 此外，基于波形形状的特征指标可能无法揭示REB的相关特征，因为不同的编码器分辨率会导致IAS信号形状的不同。不过幸运的是，冲击指标和周期性指标可以用于IAS-BASED的轴承故障诊断方法研究。</span></p>
+<h2 id="iv-angular-period-of-faulty-reb">IV. ANGULAR PERIOD OF FAULTY REB</h2>
+<p><img src="attachments/JGDUS8R3.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;JGDUS8R3&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22DVE5K8WZ%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226252%22%2C%22position%22%3A%7B%22pageIndex%22%3A2%2C%22rects%22%3A%5B%5B358.75%2C321.167%2C561.667%2C345.333%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226252%22%7D%7D&quot; width=&quot;338&quot; height=&quot;40&quot; src=&quot;attachments/JGDUS8R3.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p>由随机滑动所引起的二阶循环平稳变量定义式。</p>
+<p>上述重新定义了考虑随机滑动的REB故障角度周期。</p>
+<h2 id="v-two-ias-based-sa-frameworks">V. TWO IAS-BASED SA FRAMEWORKS</h2>
+<p><span style="color: #ffcb00">Methodology</span></p>
+<h3 id="a-%E4%BC%A0%E7%BB%9F%E7%9A%84sa">A 传统的SA</h3>
+<p><span style="background-color: #a28ae580">简述传统SA，给出公式。点明传统的SA无法适用于有滑动的REB故障。</span></p>
+<h3 id="b-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">B 准备工作</h3>
+<h4 id="1%E9%87%8D%E9%87%87%E6%A0%B7">1）重采样</h4>
+<p>因为存在的滑动与滚动轴承故障相关冲击衰减振荡的角度区间是一个二阶循环平稳变量。</p>
+<p>另一方面，传统的降采样操作会丢失故障信息，因为未考虑冲击前后存在的滑移差。</p>
+<p><img src="attachments/AVZ67TSN.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;AVZ67TSN&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%224SZVCHTY%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226253%22%2C%22position%22%3A%7B%22pageIndex%22%3A3%2C%22rects%22%3A%5B%5B298.75%2C601.5833333333334%2C536.25%2C730.75%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226253%22%7D%7D&quot; width=&quot;396&quot; height=&quot;215&quot; src=&quot;attachments/AVZ67TSN.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<h4 id="2%E6%94%B9%E8%BF%9B%E8%B4%9F%E7%86%B5">2）改进负熵</h4>
+<p>$$
+\operatorname{Sh}(x)=\wp_{1}(x) \wp_{2}(x)
+$$</p>
+<p>$\wp_1(x)$是标准差，它用于表征能量的偏差。</p>
+<p>$\wp_2(x)$是负熵的计算，基于自适应软阈值工具MAD可以减少背景噪声的干扰</p>
+<h4 id="3%E6%8F%90%E5%87%BA%E7%9A%84%E6%96%B9%E6%B3%95">3）提出的方法</h4>
+<p><img src="attachments/Z9BGYJJY.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;Z9BGYJJY&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22GPJTFCSA%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226254%22%2C%22position%22%3A%7B%22pageIndex%22%3A4%2C%22rects%22%3A%5B%5B319.853%2C413.912%2C540.441%2C729.794%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226254%22%7D%7D&quot; width=&quot;368&quot; height=&quot;527&quot; src=&quot;attachments/Z9BGYJJY.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<h4 id="1indicator-based-saisa">1）Indicator-Based SA(ISA)</h4>
+<p>⭐上述左图就是ISA（详见论文）</p>
+<h4 id="2-cyclic-dislocation-averaging">2) Cyclic Dislocation Averaging</h4>
+<p>⭐上述右图（详见论文）</p>
+<h4 id="3-computational-cost">3) Computational Cost</h4>
+<h4 id="4-discussion">4) Discussion</h4>
+<h2 id="vi-validation">VI. VALIDATION</h2>
+<p>为了验证所提方法得有效性，分别对比了传统得同步平均算法和谱相干算法。</p>
+<h3 id="a-simulation">A. Simulation</h3>
+<p>生成仿真编码器信号</p>
+<p><img src="attachments/WXINWHE6.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;WXINWHE6&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22UVI7FKMB%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226257%22%2C%22position%22%3A%7B%22pageIndex%22%3A7%2C%22rects%22%3A%5B%5B28.125%2C520.594%2C293.438%2C733.875%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226257%22%7D%7D&quot; width=&quot;442&quot; height=&quot;355&quot; src=&quot;attachments/WXINWHE6.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p><img src="attachments/4VWKRR7D.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;4VWKRR7D&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22L24ZS4WM%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226257%22%2C%22position%22%3A%7B%22pageIndex%22%3A7%2C%22rects%22%3A%5B%5B27.188%2C389.812%2C292.5%2C514.969%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226257%22%7D%7D&quot; width=&quot;442&quot; height=&quot;209&quot; src=&quot;attachments/4VWKRR7D.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p><img src="attachments/3946JECV.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;3946JECV&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22YHTLHUR6%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226257%22%2C%22position%22%3A%7B%22pageIndex%22%3A7%2C%22rects%22%3A%5B%5B30%2C261.844%2C292.03125%2C382.78099999999995%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226257%22%7D%7D&quot; width=&quot;437&quot; height=&quot;202&quot; src=&quot;attachments/3946JECV.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p><img src="attachments/6PY2J32D.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;6PY2J32D&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22G488MZDW%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226257%22%2C%22position%22%3A%7B%22pageIndex%22%3A7%2C%22rects%22%3A%5B%5B296.71875%2C472.3119999999999%2C555%2C733.8749999999999%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226257%22%7D%7D&quot; width=&quot;430&quot; height=&quot;435&quot; src=&quot;attachments/6PY2J32D.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<h3 id="b-experiments">B. Experiments</h3>
+<p>通过对两种不同的工况实验数据（with and without gear mesh）进行分析、处理、对比，如图所示：</p>
+<p><img src="attachments/P9N8QY27.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;P9N8QY27&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22LPUYJ6M2%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226258%22%2C%22position%22%3A%7B%22pageIndex%22%3A8%2C%22rects%22%3A%5B%5B38.046437149719765%2C303.579%2C297.238%2C580.367%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226258%22%7D%7D&quot; width=&quot;432&quot; height=&quot;461&quot; src=&quot;attachments/P9N8QY27.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p><img src="attachments/IIQZ3CR4.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;IIQZ3CR4&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%22J5ZSGSQT%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226258%22%2C%22position%22%3A%7B%22pageIndex%22%3A8%2C%22rects%22%3A%5B%5B300.091%2C604.146%2C559.758%2C723.992%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226258%22%7D%7D&quot; width=&quot;433&quot; height=&quot;200&quot; src=&quot;attachments/IIQZ3CR4.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<p><img src="attachments/FM85PB38.png" alt="&lt;img alt=&quot;&quot; data-attachment-key=&quot;FM85PB38&quot; data-annotation=&quot;%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FSD8MVJL3%22%2C%22annotationKey%22%3A%224EFHYFUB%22%2C%22color%22%3A%22%23ffd400%22%2C%22pageLabel%22%3A%226258%22%2C%22position%22%3A%7B%22pageIndex%22%3A8%2C%22rects%22%3A%5B%5B300.091%2C340.674%2C559.283%2C597.963%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F9613257%2Fitems%2FD7329F2B%22%5D%2C%22locator%22%3A%226258%22%7D%7D&quot; width=&quot;432&quot; height=&quot;429&quot; src=&quot;attachments/FM85PB38.png&quot; ztype=&quot;zimage&quot;&gt;"></p>
+<h2 id="vii-conclusion">VII. CONCLUSION</h2>
+<p>提出了两种基于IAS的SA框架，用于增强随机滑动条件下REB故障的相关特性。然后，引入改进的负熵指标来评估冲击波形是否严格对齐，并表征与REB故障相关的能量流。进一步研究了故障相关波形与编码器分辨率之间的关系，为两次最大随机滑动采样保留故障相关的衰减脉冲振荡特性提供了支持。仿真和实验结果表明，所提出的方案可用于增强REB相关的故障特征。 值得一提的是，在未来的工作中，将进一步研究鲁棒性更高的特征指标，因为在低信噪比条件下，不合适的特征指标可能无法增强与REB故障相关的特征。</p>
+
+</body>
+</html>
